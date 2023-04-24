@@ -1,0 +1,15 @@
+{
+  "batch_size": 2,
+  "learning_rate": 2e-5,
+  "num_epochs": 10,
+  "seq_len": 1024,
+  "d_model": 1024,
+  "n_head": 8,
+  "d_k": 128,
+  "d_v": 128,
+  "d_ff": 4096,
+  "n_layer": 6,
+  "dropout": 0.1
+}
+  
+  
