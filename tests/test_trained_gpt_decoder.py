@@ -16,9 +16,8 @@ def test_trained_gpt_decoder():
     # Initialize GPTDecoder model with the same parameters as your pre-trained model
     tokenizer = AutoTokenizer.from_pretrained('gpt2')
     #model = GPT2LMHeadModel.from_pretrained('gpt2-large').to(device)
-    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    tokenizer.add_special_tokens(config['special_tokens'])
     
-    tokenizer.pad_token = tokenizer.eos_token
     model = GPTDecoder(
         vocab_size=tokenizer.vocab_size,
         d_model=config['d_model'],
@@ -33,10 +32,11 @@ def test_trained_gpt_decoder():
     model.load_state_dict(state_dict)
     
     # Input sentence
-    input_text = "I asked Dean if "
+    input_text = "Hello, I am Chatty Fish, how are you?"
 
     # Tokenize input text
     input_ids = tokenizer.encode(input_text, return_tensors="pt").to(device)
+    print("Input id:", input_ids)
     input_tokens = tokenizer.convert_ids_to_tokens(input_ids[0])
     input_text = tokenizer.decode(input_ids[0], clean_up_tokenization_spaces=True)
     print("Input Tokens:", input_tokens)
@@ -47,10 +47,12 @@ def test_trained_gpt_decoder():
 
     # Generate text using your model
     output = model.generate(input_ids).to(device)
+    print("Output id:", output[0][0])
+    output_tokens = tokenizer.convert_ids_to_tokens(output[0][0])
+    print("Output tokens:", output_tokens)
 
     # Decode output tokens
-    generated_text = tokenizer.decode(output[0][0], skip_special_tokens=False)
-
+    generated_text = tokenizer.decode(output[0][0], skip_special_tokens=True, clean_up_tokenization_spaces=True)
 
     # Test if the generated_text is not empty
     assert generated_text, "The generated text is empty"

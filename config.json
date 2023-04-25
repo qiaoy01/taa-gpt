@@ -1,15 +1,27 @@
 {
-  "batch_size": 28,
+  "batch_size": 8,
   "learning_rate": 2e-5,
-  "num_epochs": 1000,
+  "num_epochs": 30,
   "seq_len": 1024,
-  "d_model": 1024,
+  "d_model": 128,
   "n_head": 8,
-  "d_k": 128,
-  "d_v": 128,
-  "d_ff": 4096,
+  "d_k": 16,
+  "d_v": 16,
+  "d_ff": 256,
   "n_layer": 6,
-  "dropout": 0.1
+  "dropout": 0.1,
+
+  "training_data_dir": "data/text",
+  "model_dir": "models",
+  "vocab_size": 28000,
+  "model_type": "bpe",
+  "model_prefix": "bpe_tokenizer",
+  "output_vocab": "vocab.txt",
+
+  "special_tokens" : {
+    "pad_token": "<|endoftext|>"
+  }
 }
+
   
   

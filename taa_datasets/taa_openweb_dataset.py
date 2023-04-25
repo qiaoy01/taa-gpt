@@ -38,7 +38,7 @@ class TaaOpenWebTextDataset(datasets.Dataset):
 
     def __getitem__(self, idx: int):
         
-        print(idx)
+        #print(idx)
         if isinstance(idx, list):
             text_list = []
             for i in idx:
@@ -73,7 +73,7 @@ if __name__=="__main__":
 
     # Load the dataset
     data_dir = 'data/openwebtext'
-    dataset = MyOpenWebTextDataset(data_dir=data_dir,tokenizer=tokenizer)
+    dataset = TaaOpenWebTextDataset(data_dir=data_dir,tokenizer=tokenizer)
 
     # Print the number of examples in the dataset
     print(len(dataset))

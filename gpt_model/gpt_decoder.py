@@ -120,3 +120,5 @@ class GPTDecoder(nn.Module):
         self.eval()
         generated_sequences = self.generate(input_tokens, max_length=max_length)
         print("Example Untrained GPTDecoder Prediction:", generated_sequences)
+        return generated_sequences
+
