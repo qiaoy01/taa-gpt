@@ -1,13 +1,28 @@
 import torch
-from transformers import GPT2Tokenizer, GPT2LMHeadModel
+from transformers import AutoTokenizer
+import json
+from gpt_model.gpt_decoder import GPTDecoder
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # Load the saved state dictionary
 state_dict = torch.load('models/taa.pt', map_location=torch.device('cpu'))
 
-# Instantiate the GPT2LMHeadModel and load the saved state dictionary
-model = GPT2LMHeadModel.from_pretrained('gpt2', state_dict=state_dict)
+with open('config.json', 'r') as f:
+    config = json.load(f)
 
-tokenizer = GPT2Tokenizer.from_pretrained('gpt2')
+tokenizer = AutoTokenizer.from_pretrained('gpt2')
+tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+model = GPTDecoder(
+        vocab_size=tokenizer.vocab_size,
+        d_model=config['d_model'],
+        n_head=config['n_head'],
+        d_ff=config['d_ff'],
+        n_layer=config['n_layer'],
+        max_seq_len=config['seq_len'],
+        dropout=config['dropout'],
+        padding_token_id=tokenizer.pad_token_id,
+        device=device
+    )
 
 def chatbot(input_text):
     # Tokenize input text
@@ -22,7 +37,7 @@ def chatbot(input_text):
         do_sample=True,
         top_k=0,
         top_p=0.9,
-        pad_token_id=tokenizer.eos_token_id,
+        pad_token_id=tokenizer.pad_token_id,
         eos_token_id=tokenizer.eos_token_id
     )
 

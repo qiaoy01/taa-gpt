@@ -1,7 +1,7 @@
 {
-  "batch_size": 2,
+  "batch_size": 28,
   "learning_rate": 2e-5,
-  "num_epochs": 10,
+  "num_epochs": 1000,
   "seq_len": 1024,
   "d_model": 1024,
   "n_head": 8,
