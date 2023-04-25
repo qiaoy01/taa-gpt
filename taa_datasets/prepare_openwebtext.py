@@ -3,10 +3,10 @@ import tarfile
 import lzma
 
 # Path to folder containing tar files
-source_folder = "C:/Users/davidsudo/Downloads"
+source_folder = ""
 
 # Path to folder where extracted files will be saved
-target_folder = "C:/git/taa/taa/data"
+target_folder = ""
 
 # Extract tar files
 for root, dirs, files in os.walk(source_folder):
