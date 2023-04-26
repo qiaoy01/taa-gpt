@@ -90,15 +90,21 @@ def test_untrained_distribution():
     # Sample input sequence (batch_size=1, seq_len=10)
     input_tokens = torch.tensor([[2, 6, 9, 4, 1, 8, 7, 3, 5, 0]]).to(device)
 
+    with open('config.json', 'r') as f:
+        config = json.load(f)
+
+    tokenizer = AutoTokenizer.from_pretrained('gpt2')
+    tokenizer.add_special_tokens(config['special_tokens'])
+
     # Hyperparameters for the GPTDecoder
-    vocab_size = 11
-    d_model = 64
-    n_head = 4
-    d_ff = 128
-    n_layer = 6
-    max_seq_len = 50
-    padding_token_id = 0
-    dropout = 0.1
+    vocab_size = tokenizer.vocab_size
+    d_model = config['d_model']
+    n_head = config['n_head']
+    d_ff = config['d_ff']
+    n_layer = config['n_layer']
+    max_seq_len = config['seq_len']
+    padding_token_id = tokenizer.pad_token_id
+    dropout = config['dropout']
 
     # Instantiate the GPTDecoder
     gpt_decoder = GPTDecoder(vocab_size, d_model, n_head, d_ff, n_layer, max_seq_len, padding_token_id, device, dropout).to(device)
@@ -127,19 +133,6 @@ def test_untrained_distribution():
     # Sample input sequence (batch_size=1, seq_len=50)
     input_tokens = torch.randint(0, 100, (1, 50)).to(device)
 
-    # Hyperparameters for the GPTDecoder
-    vocab_size = 100
-    d_model = 256
-    n_head = 8
-    d_ff = 512
-    n_layer = 12
-    max_seq_len = 200
-    padding_token_id = 0
-    dropout = 0.1
-
-    # Instantiate the GPTDecoder
-    gpt_decoder = GPTDecoder(vocab_size, d_model, n_head, d_ff, n_layer, max_seq_len, padding_token_id, device, dropout).to(device)
-
     # Pass the input_tokens to the GPTDecoder
     output = gpt_decoder(input_tokens)
 
@@ -164,32 +157,12 @@ def test_untrained_distribution():
     distribution_reasonable = average_entropy >= entropy_threshold
     print(f"Is the output distribution reasonable? {distribution_reasonable}")
 
-    # Load training parameters from config file
-    with open('config.json', 'r') as f:
-        config = json.load(f)
-
-    # Use GPT2Tokenizer to tokenize the input text
-    tokenizer = AutoTokenizer.from_pretrained("gpt2")
-    tokenizer.add_special_tokens(config['special_tokens'])
 
     text = "The quick brown fox jumps over the lazy dog."
     input_tokens = tokenizer.encode(text, return_tensors="pt").to(device)
 
     # Remove the last token to predict it using the GPTDecoder
     input_tokens = input_tokens[:, :-1]
-
-    # Hyperparameters for the GPTDecoder
-    vocab_size = tokenizer.vocab_size
-    d_model = 768
-    n_head = 12
-    d_ff = 3072
-    n_layer = 12
-    max_seq_len = 512
-    padding_token_id = tokenizer.pad_token_id
-    dropout = 0.1
-
-    # Instantiate the GPTDecoder
-    gpt_decoder = GPTDecoder(vocab_size, d_model, n_head, d_ff, n_layer, max_seq_len, padding_token_id, device, dropout).to(device)
 
     # Pass the input_tokens to the GPTDecoder
     output_logits = gpt_decoder(input_tokens)
@@ -233,13 +206,13 @@ def virtualize_attention():
 
     # Hyperparameters for the GPTDecoder
     vocab_size = tokenizer.vocab_size
-    d_model = 64
-    n_head = 8
-    d_ff = 128
-    n_layer = 3
-    max_seq_len = 128
+    d_model = config['d_model']
+    n_head = config['n_head']
+    d_ff = config['d_ff']
+    n_layer = config['n_layer']
+    max_seq_len = config['seq_len']
     padding_token_id = tokenizer.pad_token_id
-    dropout = 0.1
+    dropout = config['dropout']
 
     # Instantiate the GPTDecoder
     gpt_decoder = GPTDecoder(vocab_size, d_model, n_head, d_ff, n_layer, max_seq_len, padding_token_id, device, dropout).to(device)
@@ -274,111 +247,8 @@ def print_model_structure(model):
     print_model_structure(model)
 
 
-
-def draw_gpt_decoder_structure():
-    dot = Digraph(comment='GPTDecoder Model Structure', format='png')
-
-    # GPTDecoder
-    dot.node('A', 'GPTDecoder')
-    
-    # Embedding
-    dot.node('B', 'embedding: Embedding')
-    dot.edge('A', 'B')
-
-    # Layers
-    dot.node('C', 'layers: ModuleList')
-    dot.edge('A', 'C')
-
-    # Layer 0
-    draw_gpt_decoder_layer(dot, '0', 'D')
-    
-    # Layer 1
-    draw_gpt_decoder_layer(dot, '1', 'E')
-    
-    # Layer 2
-    draw_gpt_decoder_layer(dot, '2', 'F')
-
-    # Final Linear Layer
-    dot.node('G', 'fc: Linear')
-    dot.edge('A', 'G')
-
-    dot.render('gpt_decoder_structure', view=True)
-
-def draw_gpt_decoder_layer(dot, layer_idx, node_prefix):
-    layer = f'layers.{layer_idx}'
-    layer_label = f'{layer}: GPTDecoderLayer'
-    dot.node(f'{node_prefix}', layer_label)
-    dot.edge('C', f'{node_prefix}')
-
-    # Self-Attention
-    draw_self_attention(dot, layer, node_prefix)
-
-    # Feed-Forward
-    draw_feed_forward(dot, layer, node_prefix)
-
-    # Layer Norms and Dropout
-    dot.node(f'{node_prefix}LN1', f'{layer}.layer_norm1: LayerNorm')
-    dot.edge(f'{node_prefix}', f'{node_prefix}LN1')
-    dot.node(f'{node_prefix}LN2', f'{layer}.layer_norm2: LayerNorm')
-    dot.edge(f'{node_prefix}', f'{node_prefix}LN2')
-    dot.node(f'{node_prefix}DO', f'{layer}.dropout: Dropout')
-    dot.edge(f'{node_prefix}', f'{node_prefix}DO')
-
-def draw_self_attention(dot, layer, node_prefix):
-    sa = f'{layer}.self_attention'
-    dot.node(f'{node_prefix}SA', f'{sa}: MultiHeadAttention')
-    dot.edge(f'{node_prefix}', f'{node_prefix}SA')
-    
-    # Linear layers
-    dot.node(f'{node_prefix}SAWQ', f'{sa}.w_qs: Linear')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAWQ')
-    dot.node(f'{node_prefix}SAWK', f'{sa}.w_ks: Linear')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAWK')
-    dot.node(f'{node_prefix}SAWV', f'{sa}.w_vs: Linear')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAWV')
-
-    # FC and Attention
-    dot.node(f'{node_prefix}SAFC', f'{sa}.fc: Linear')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAFC')
-    dot.node(f'{node_prefix}SAA', f'{sa}.attention: ScaledDotProductAttention')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAA')
-
-    # Dropout and Softmax
-    dot.node(f'{node_prefix}SADO', f'{sa}.attention.dropout: Dropout')
-    dot.edge(f'{node_prefix}SAA', f'{node_prefix}SADO')
-    dot.node(f'{node_prefix}SASM', f'{sa}.attention.softmax: Softmax')
-    dot.edge(f'{node_prefix}SAA', f'{node_prefix}SASM')
-
-    # Self-Attention Dropout and LayerNorm
-    dot.node(f'{node_prefix}SAD', f'{sa}.dropout: Dropout')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SAD')
-    dot.node(f'{node_prefix}SALN', f'{sa}.layer_norm: LayerNorm')
-    dot.edge(f'{node_prefix}SA', f'{node_prefix}SALN')
-
-def draw_feed_forward(dot, layer, node_prefix):
-    ff = f'{layer}.feed_forward'
-    dot.node(f'{node_prefix}FF', f'{ff}: PositionwiseFeedForward')
-    dot.edge(f'{node_prefix}', f'{node_prefix}FF')
-
-    # Feed-Forward Sequential
-    dot.node(f'{node_prefix}FFS', f'{ff}.fc: Sequential')
-    dot.edge(f'{node_prefix}FF', f'{node_prefix}FFS')
-
-    # Linear, GELU, Dropout, Linear, LayerNorm
-    dot.node(f'{node_prefix}FFSL1', f'{ff}.fc.0: Linear')
-    dot.edge(f'{node_prefix}FFS', f'{node_prefix}FFSL1')
-    dot.node(f'{node_prefix}FFSG', f'{ff}.fc.1: GELU')
-    dot.edge(f'{node_prefix}FFS', f'{node_prefix}FFSG')
-    dot.node(f'{node_prefix}FFSD', f'{ff}.fc.2: Dropout')
-    dot.edge(f'{node_prefix}FFS', f'{node_prefix}FFSD')
-    dot.node(f'{node_prefix}FFSL2', f'{ff}.fc.3: Linear')
-    dot.edge(f'{node_prefix}FFS', f'{node_prefix}FFSL2')
-    dot.node(f'{node_prefix}FFSLN', f'{ff}.fc.4: LayerNorm')
-    dot.edge(f'{node_prefix}FFS', f'{node_prefix}FFSLN')
-
 if __name__ == '__main__':
     test_gpt_decoder_layer()
     test_gpt_decoder()
     test_untrained_distribution()
     virtualize_attention()
-    draw_gpt_decoder_structure()
