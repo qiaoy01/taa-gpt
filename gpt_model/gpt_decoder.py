@@ -27,9 +27,11 @@ class GPTDecoder(nn.Module):
         p = self.pos_encoding[:x.size(1), :]
         input_embedded = e + p
         combined_mask = self.create_combined_mask(x)
-
+        
+        self.attention_weights = []
         for layer in self.layers:
-            input_embedded = layer(input_embedded, mask=combined_mask)
+            input_embedded, attn_weights = layer(input_embedded, mask=combined_mask)
+            self.attention_weights.append(attn_weights)
 
         output = self.fc(input_embedded)
 
@@ -121,4 +123,28 @@ class GPTDecoder(nn.Module):
         generated_sequences = self.generate(input_tokens, max_length=max_length)
         print("Example Untrained GPTDecoder Prediction:", generated_sequences)
         return generated_sequences
+    
+    def visualize_attention(self, input_tokens):
+        with torch.no_grad():
+            self.forward(input_tokens)
+
+        num_layers = len(self.attention_weights)
+        num_heads = self.attention_weights[0].size(1)
+        token_list = [token for token in input_tokens[0].tolist()]
+
+        fig, axes = plt.subplots(num_layers, num_heads, figsize=(15, num_layers * 2))
+        for layer_id in range(num_layers):
+            for head_id in range(num_heads):
+                attn_weights = self.attention_weights[layer_id][0, head_id].cpu().numpy()
+
+                ax = axes[layer_id, head_id]
+                ax.matshow(attn_weights, cmap='viridis')
+                ax.set_xticks(range(len(token_list)))
+                ax.set_yticks(range(len(token_list)))
+                #ax.set_xticklabels(token_list, rotation=90)
+                #ax.set_yticklabels(token_list)
+                ax.set_title(f'Layer {layer_id + 1}, Head {head_id + 1}')
+
+        plt.tight_layout()
+        plt.show()
 

@@ -20,14 +20,14 @@ class GPTDecoderLayer(nn.Module):
     def forward(self, x, mask=None):
         x = x.to(self.device)
         # Self-attention block
-        _x, _ = self.self_attention(x, x, x)
+        _x, attn_weights = self.self_attention(x, x, x)
         x = self.layer_norm1(x + self.dropout(_x))
 
         # Position-wise feed-forward block
         _x = self.feed_forward(x)
         x = self.layer_norm2(x + self.dropout(_x))
 
-        return x
+        return x, attn_weights
 
 
 
