@@ -11,7 +11,7 @@ with open('config.json', 'r') as f:
     config = json.load(f)
 
 tokenizer = AutoTokenizer.from_pretrained('gpt2')
-tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+tokenizer.add_special_tokens(config['special_tokens'])
 model = GPTDecoder(
         vocab_size=tokenizer.vocab_size,
         d_model=config['d_model'],
@@ -26,23 +26,18 @@ model = GPTDecoder(
 
 def chatbot(input_text):
     # Tokenize input text
-    input_ids = tokenizer.encode(input_text, return_tensors='pt')
+    input_ids = tokenizer.encode(input_text, return_tensors='pt').to(device)
 
     # Generate response
     response = model.generate(
         input_ids=input_ids,
         max_length=50,
         temperature=0.8,
-        repetition_penalty=1.2,
-        do_sample=True,
         top_k=0,
-        top_p=0.9,
-        pad_token_id=tokenizer.pad_token_id,
-        eos_token_id=tokenizer.eos_token_id
     )
 
     # Decode response tokens and return as string
-    return tokenizer.decode(response[0], skip_special_tokens=True)
+    return tokenizer.decode(response[0][0], skip_special_tokens=True)
 
 while True:
     user_input = input("You: ")
