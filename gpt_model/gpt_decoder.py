@@ -99,6 +99,28 @@ class GPTDecoder(nn.Module):
             generated_sequences.append(sequence[:, input_ids.shape[1]:].squeeze(-1))
         return torch.stack(generated_sequences, dim=0)
     
+    def greedy_generate(self, input_ids, max_length=50):
+        generated_sequences = []
+        sequence = input_ids
+        with torch.no_grad():
+            for _ in range(max_length - len(input_ids[0])):
+                # Get logits for the next token
+                logits = self.model.forward(sequence)[0][:, -1]
+                
+                # Find the index of the most probable token
+                next_token = torch.argmax(logits, dim=-1)
+                
+                # Add the next token to the sequence
+                next_token = next_token.unsqueeze(-1)
+                sequence = torch.cat((sequence, next_token), dim=-1)
+
+                # Limit the generated sequence length to the size of the positional encoding matrix
+                if sequence.size(1) >= self.model.pos_encoding.size(0):
+                    break
+
+        generated_sequences.append(sequence[:, input_ids.shape[1]:].squeeze(-1))
+        return torch.stack(generated_sequences, dim=0)
+    
     def visualize_positional_encoding(self):
         pos_encoding = self.pos_encoding.detach().cpu().numpy()
         plt.figure(figsize=(15, 5))
