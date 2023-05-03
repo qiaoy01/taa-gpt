@@ -1,5 +1,5 @@
 # TAA GPT
-TAAGPT is a simple and easy-to-understand GPT kernel that includes a trainer, a web interface for loss functions, and a small training model. By installing TAAGPT locally, you can learn the basic structure and training methods of the Transformer. <br>
+TAAGPT is a small and easy-to-understand GPT kernel that includes a trainer, a web interface for loss functions, and a small training model. By installing TAAGPT locally, you can learn the basic structure and training methods of the Transformer. <br>
 
 To install TAAGPT, follow these steps:<br>
 
