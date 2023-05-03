@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoTokenizer
 import json
-from gpt_model.gpt_decoder import GPTDecoder
+from core.model import GPTDecoder
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 # Load the saved state dictionary
@@ -15,14 +15,13 @@ tokenizer.add_special_tokens(config['special_tokens'])
 model = GPTDecoder(
         vocab_size=tokenizer.vocab_size,
         d_model=config['d_model'],
-        n_head=config['n_head'],
+        num_heads=config['n_head'],
         d_ff=config['d_ff'],
-        n_layer=config['n_layer'],
+        num_layers=config['n_layer'],
         max_seq_len=config['seq_len'],
-        dropout=config['dropout'],
-        padding_token_id=tokenizer.pad_token_id,
-        device=device
-    )
+        dropout_rate=config['dropout'],
+        causal_attention=True
+    ).to(device)
 
 def chatbot(input_text):
     # Tokenize input text

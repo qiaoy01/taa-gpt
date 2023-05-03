@@ -1,0 +1,38 @@
+{
+  "batch_size": 1,
+  "learning_rate": 1e-5,
+  "num_epochs": 200000,
+  "seq_len": 2048,
+  "d_model": 1024,
+  "n_head": 16,
+  "d_k": 64,
+  "d_v": 64,
+  "d_ff": 4096,
+  "n_layer": 12,
+  "dropout": 0.1,
+  "est": 0.0001,
+
+  "beta1": 0.9, 
+  "beta2": 0.95,
+  "weight_decay": 0.1,
+  "grad_norm_clip": 1.0,
+
+  "num_workers": 4,
+
+  "model_dir": "models",
+  "model_name": "taa.pt",
+  "checkpoint": 500,
+  
+  "vocab_size": 28000,
+  "model_type": "bpe",
+  "model_prefix": "bpe_tokenizer",
+
+  "special_tokens" : {
+    "pad_token": "<|endoftext|>"
+  },
+
+  "show_loss_curve": true
+}
+
+  
+  
