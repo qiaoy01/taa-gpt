@@ -1,0 +1,62 @@
+body {
+    background-image: url('/static/images/background.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    font-family: 'Orbitron', sans-serif;
+    color: #000000;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, select, textarea {
+    background-color: #f0f0f0;
+    border: 1px solid #003366;
+    color: #003366;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    background-color: #4caf50;
+}
+
+button {
+    font-family: 'Roboto Mono', monospace;
+}
+
+.btn-primary {
+    background-color: #4caf50;
+    border-color: #4caf50;
+}
+
+.btn-secondary {
+    background-color: #f9ab00;
+    border-color: #f9ab00;
+}
+
+#lossCanvas {
+    background-color: #f0f0f0;
+    border: none;
+}
+
+.custom-container {
+    max-width: 95%;
+}
+
+#lossCanvas {
+    /* 背景颜色设置为乳白色 */
+    background-color: #f5f5f5;
+    /* 设置边框 */
+    border: 3px solid #d1d1d1;
+    /* 将内侧的边框增加到 canvas 内部的距离 */
+    padding: 5px;
+    /* 设置边框样式为实线 */
+    border-style: solid;
+    /* 设置边框颜色为灰色 */
+    border-color: #a9a9a9;
+    /* 将边框的圆角设置为5px */
+    border-radius: 5px;
+  }
+
+

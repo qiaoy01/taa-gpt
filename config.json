@@ -1,38 +1,30 @@
 {
-  "batch_size": 64,
-  "learning_rate": 1e-5,
-  "num_epochs": 200000,
-  "seq_len": 6,
-  "d_model": 256,
-  "n_head": 8,
-  "d_k": 32,
-  "d_v": 32,
-  "d_ff": 1024,
-  "n_layer": 8,
-  "dropout": 0.1,
-  "est": 0.0001,
-
-  "beta1": 0.9, 
-  "beta2": 0.95,
-  "weight_decay": 0.1,
-  "grad_norm_clip": 1.0,
-
-  "num_workers": 4,
-
-  "model_dir": "models",
-  "model_name": "adder.pt",
-  "checkpoint": 1000,
-
-  "vocab_size": 28000,
-  "model_type": "bpe",
-  "model_prefix": "bpe_tokenizer",
-
-  "special_tokens" : {
-    "pad_token": "<|endoftext|>"
-  },
-
-  "show_loss_curve": false
+    "batch_size": 64,
+    "learning_rate": 1e-05,
+    "num_epochs": 200000,
+    "seq_len": 6,
+    "d_model": 256,
+    "n_head": 8,
+    "d_k": 32,
+    "d_v": 32,
+    "d_ff": 1024,
+    "n_layer": 8,
+    "dropout": 0.1,
+    "est": 0.0001,
+    "beta1": 0.9,
+    "beta2": 0.95,
+    "weight_decay": 0.1,
+    "grad_norm_clip": 1,
+    "num_workers": 4,
+    "optimizer": "AdamW",
+    "model_dir": "models",
+    "model_name": "adder.pt",
+    "checkpoint": 1000,
+    "vocab_size": 28000,
+    "model_type": "bpe",
+    "model_prefix": "bpe_tokenizer",
+    "special_tokens": {
+        "pad_token": "<|endoftext|>"
+    },
+    "show_loss_curve": true
 }
-
-  
-  

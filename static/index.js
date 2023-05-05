@@ -3,9 +3,13 @@ const ctx = canvas.getContext("2d");
 const win0_height = canvas.height * 0.8
 const win1_height = canvas.height * 0.2
 const ymaxInput = document.getElementById("ymax");
+ctx.strokeStyle = "white";
+ctx.lineWidth = 2;
+ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 let yMax = parseFloat(ymaxInput.value);
 let max_iter = 1000
+let onTraining = false
 
 ymaxInput.addEventListener("input", (event) => {
     yMax = parseFloat(event.target.value);
@@ -46,6 +50,7 @@ async function updateLossCurve() {
     let response = await fetch("/loss_data");
     let data = await response.json();
     let loss_data = data.loss_data;
+
     let all_max = data.all_max
     let all_data = data.all_data
     let all_window = data.all_window
@@ -54,10 +59,13 @@ async function updateLossCurve() {
     drawAxesAndLabels();
     
     y0 = loss_data[0].y
+    py0 = win0_height - 50 - (y0 / yMax) * win0_height
+
+    ctx.strokeStyle = 'rgb(128, 128, 128)';
     ctx.beginPath();
     ctx.moveTo(
         50,
-        win0_height - 50 - (y0 / yMax) * win0_height
+        py0
     );
 
     for (let i = 1; i < loss_data.length; i++) {
@@ -98,7 +106,9 @@ async function updateLossCurve() {
 function updateAndRedraw() {
     updateLossCurve();
     drawAxesAndLabels();
-    setTimeout(updateAndRedraw, 1000);
+    if(onTraining === true) {
+        setTimeout(updateAndRedraw, 1000);
+    }
 }
 
 updateAndRedraw();

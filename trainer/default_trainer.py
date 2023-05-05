@@ -19,7 +19,12 @@ class Trainer:
         self.betas = (self.config['beta1'], self.config['beta2'])
         self.learing_rate = self.config['learning_rate']
         self.model = model.to(self.device)
-        self.optimizer = torch.optim.AdamW(model.parameters(), lr=self.config['learning_rate'], betas=self.betas)
+        
+        if self.config['optimizer']=='AdamW':
+            self.optimizer = torch.optim.AdamW(self.model.parameters(), lr=self.config['learning_rate'], betas=self.betas)
+        elif self.config['optimizer'] == 'SDG':
+            self.optimizer = torch.optim.SGD(self.model.parameters(), lr=self.config['learning_rate'])
+        
         self.train_dataset = train_dataset
 
         self.iter_num = 0

@@ -5,26 +5,80 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Orbitron&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/css/custom.css">
     <title>Loss Curve</title>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container custom-container mx-auto">
         <div class="row mb-3"></div>
         <div class="row">
-            <div class="col-md-10">
-                <canvas id="lossCanvas" width="800" height="800" style="border:1px solid #000;"></canvas>
+            <div class="col-md-9">
+                <canvas id="lossCanvas" width="1200" height="800" style="border:1px solid #000;"></canvas>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div class="row">
                     <div class="col-md-4"><label for="ymax">Scale</label></div>
-                    <div class="col-md-6"><input type="range" id="ymax" name="ymax" min="0.1" max="5" step="0.1" value="1.20"></div>
+                    <div class="col-md-8"><input type="range" id="ymax" name="ymax" min="0.1" max="5" step="0.1"
+                            value="1.20"></div>
                 </div>
-            </div> 
+                <div class="row">
+                    <div class="col-md-4"><label for="configSelect">Config</label></div>
+                    <div class="col-md-8">
+                        <select id="configSelect" onchange="onConfigSelectChange()" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <textarea id="configDetails" rows="10" cols="30" readonly class="form-control"></textarea>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button id="saveBtn" onclick="saveConfig()" class="btn btn-primary btn-block mb-2">Save</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button id="saveAsBtn" onclick="saveConfigAs()"
+                            class="btn btn-secondary btn-block">As...</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><label>Size</label></div>
+                    <div class="col-md-8" id="modelSize"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><label>Size(M)</label></div>
+                    <div class="col-md-8" id="modelSizeM"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4"><label>Size(G)</label></div>
+                    <div class="col-md-8" id="modelSizeG"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label for="projectSelect">Select a project:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select id="projectSelect" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button id="executeTrainingBtn" type="button" class="btn btn-primary">Start Training</button>
+                        <span id="trainingStatus" class="ml-2">Status: <span class="font-weight-bold" id="trainingStatusText">Off</span></span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <script src="/static/index.js"></script>
+    <script src="/static/cfghelper.js"></script>
     <script src="/static/main.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="main"></script>
