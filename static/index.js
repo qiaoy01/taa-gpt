@@ -9,7 +9,6 @@ ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 let yMax = parseFloat(ymaxInput.value);
 let max_iter = 1000
-let onTraining = false
 
 ymaxInput.addEventListener("input", (event) => {
     yMax = parseFloat(event.target.value);
@@ -106,9 +105,7 @@ async function updateLossCurve() {
 function updateAndRedraw() {
     updateLossCurve();
     drawAxesAndLabels();
-    if(onTraining === true) {
-        setTimeout(updateAndRedraw, 1000);
-    }
+    setTimeout(updateAndRedraw, 1000);
 }
 
 updateAndRedraw();

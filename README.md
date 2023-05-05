@@ -15,11 +15,13 @@ Please note that this project is still in its initial stages and additional feat
 
 This project is released under the MIT License. <br>
 
-## Version 0.2.0 Release notes <br>
-- Users can now initiate training directly from the web page without the need to run the training program separately. <br>
+## Version 0.2.0 Release notes 
+- Users can now initiate training directly from the web page without the need to run the training program separately. 
 - Users can obtain configuration files on the web page. 
 - Users can select training programs on the web page as well. 
 - The web page allows editing of model configuration files and displays the total parameter size of the model. 
 - In addition to the adder program trainer as an example, the built-in openwebtext training set includes 8 million English articles. 
 - The interface and font have been updated to be even more fancy. 
 - Over 40 replaceable background images are provided, including themes such as mathematics, space, future, and robots for users to freely use. These background images were created by the author and have no copyright requirements, so they can be used freely. Of course, users cannot claim their copyright.
+- Users can now place training programs under projects folder and model config file under configs folder.
+- Users can now can find training logs under logs folder.
