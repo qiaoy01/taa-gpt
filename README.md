@@ -7,9 +7,9 @@ From python official side: https://www.python.org/ to Install Python 3.10.11. Pl
 
 Use pip install -r requirements.txt to install Torch, CUDA, and other required packages.<br>
 
-Run python main.py to start the web service, then execute the training code. A simple training program is provided, which can be run in another cmd window using python tests/test_adder.py.<br>
+Run python main.py to start the web service<br>
 
-Start your browser and navigate to http://127.0.0.1:8000 to view the training process.<br>
+Start your browser and navigate to http://127.0.0.1:8000 to run and view the training process.<br>
 
 Please note that this project is still in its initial stages and additional features will be added gradually. The GPT kernel will also be modified accordingly. If you find any errors, please feel free to point them out and make changes. <br>
 
