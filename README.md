@@ -14,3 +14,12 @@ Start your browser and navigate to http://127.0.0.1:8000 to view the training pr
 Please note that this project is still in its initial stages and additional features will be added gradually. The GPT kernel will also be modified accordingly. If you find any errors, please feel free to point them out and make changes. <br>
 
 This project is released under the MIT License. <br>
+
+## Version 0.2.0 Release notes <br>
+- Users can now initiate training directly from the web page without the need to run the training program separately. <br>
+- Users can obtain configuration files on the web page. 
+- Users can select training programs on the web page as well. 
+- The web page allows editing of model configuration files and displays the total parameter size of the model. 
+- In addition to the adder program trainer as an example, the built-in openwebtext training set includes 8 million English articles. 
+- The interface and font have been updated to be even more fancy. 
+- Over 40 replaceable background images are provided, including themes such as mathematics, space, future, and robots for users to freely use. These background images were created by the author and have no copyright requirements, so they can be used freely. Of course, users cannot claim their copyright.
